@@ -73,11 +73,13 @@ def mostrar_grafo(G, colors, coloring):
   pos = nx.spring_layout(G)
   edge_x = []
   edge_y = []
+
   for edge in G.edges():
     x0, y0 = pos[edge[0]]
     x1, y1 = pos[edge[1]]
     edge_x += [x0, x1, None]  
     edge_y += [y0, y1, None]
+    
   edge_trace = go.Scatter(
     x=edge_x,
     y=edge_y,
@@ -85,11 +87,13 @@ def mostrar_grafo(G, colors, coloring):
     hoverinfo='none',
     mode='lines'
   )
+
   # Preparar os dados para os nós
   node_x = []
   node_y = []
   node_text = []
   node_colors = []
+
   for node in G.nodes():
     x, y = pos[node]
     node_x.append(x)
@@ -97,6 +101,7 @@ def mostrar_grafo(G, colors, coloring):
     color_index = coloring.get(node, 0) 
     node_text.append(f"Partida {node[0]} vs {node[1]}<br>Rodada: {color_index + 1}<br>Cor: {colors[color_index]}")
     node_colors.append(colors[color_index])
+
   node_trace = go.Scatter(
     x=node_x,
     y=node_y,
@@ -111,6 +116,7 @@ def mostrar_grafo(G, colors, coloring):
         line_width=2
     )
   )
+
   # Criar a figura Plotly
   fig = go.Figure(data=[edge_trace, node_trace],
     layout=go.Layout(
@@ -121,6 +127,7 @@ def mostrar_grafo(G, colors, coloring):
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
     ))
+  
   fig.show()
 
 
@@ -192,3 +199,4 @@ if __name__ == '__main__':
   print()
 
   mostrar_grafo(g, cores, jogos_por_cores)
+  
