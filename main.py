@@ -39,7 +39,7 @@ for i in range(len(lista_de_jogos)):
     if mandante_i == mandante_j or mandante_i == visitante_j or visitante_i == mandante_j or visitante_i == visitante_j:
       g.add_edge(lista_de_jogos[i], lista_de_jogos[j])
 
-# Lista com restrições de jogos por rodadas 
+# Dicionário com restrições de jogos por rodadas 
 restricoes_rodadas = {
   ('DFC', 'CFC'): [0, 13],  
   ('LFC', 'FFC'): [6, 12],  
@@ -48,10 +48,8 @@ restricoes_rodadas = {
   ('CFC', 'TFC'): [1, 2],    
 }
 
-# Lista com restrições de jogos por mandantes
-restricoes_mandantes = {
-  ('TFC', 'OFC'),  ('AFC', 'FFC')
-}
+# Dicionário com restrições de jogos por mandantes
+restricoes_mandantes = { ('TFC', 'OFC'),  ('AFC', 'FFC') }
 
 ''' 
 *Função que checa se houve violação da restrição dos mandantes
