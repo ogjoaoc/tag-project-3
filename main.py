@@ -115,7 +115,6 @@ def mostrar_grafo(G, colors, coloring):
   fig = go.Figure(data=[edge_trace, node_trace],
     layout=go.Layout(
         title="<br>Grafo de Partidas e Rodadas (Coloração)",
-        titlefont_size=16,
         showlegend=False,
         hovermode='closest',
         margin=dict(b=20, l=5, r=5, t=40),
