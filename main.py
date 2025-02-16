@@ -4,7 +4,7 @@ Teoria e Aplicação de Grafos - 2024.2
 Prof. Díbio
 
 Autores:
-Arthur Bispo - 
+Arthur Bispo - 232000490 
 João Carlos Gonçalves - 232009511
 '''
 import networkx as nx
