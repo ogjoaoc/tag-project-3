@@ -8,48 +8,7 @@ Arthur Bispo - 232000490
 João Carlos Gonçalves - 232009511
 '''
 import networkx as nx
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
-
-# Lista com todos os times do campeonato
-times = ['DFC', 'TFC', 'AFC', 'LFC', 'FFC', 'OFC', 'CFC']
-lista_de_jogos = []
-
-# Cores utilizadas
-cores = [
-  'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink',
-  'brown', 'gray', 'cyan', 'magenta', 'lime', 'teal', 'navy'
-]
-
-# Criando o grafo
-g = nx.Graph()
-
-# Acionando cada jogo possível como um vértice 
-for a in times:
-  for b in times:
-    if a != b:
-      g.add_node((a, b))
-      lista_de_jogos.append((a, b))
-
-# Adicionando arestas entre jogos conflituosos
-for i in range(len(lista_de_jogos)):
-  for j in range(i + 1, len(lista_de_jogos)):
-    mandante_i, visitante_i = lista_de_jogos[i]
-    mandante_j, visitante_j = lista_de_jogos[j]
-    if mandante_i == mandante_j or mandante_i == visitante_j or visitante_i == mandante_j or visitante_i == visitante_j:
-      g.add_edge(lista_de_jogos[i], lista_de_jogos[j])
-
-# Dicionário com restrições de jogos por rodadas 
-restricoes_rodadas = {
-  ('DFC', 'CFC'): [0, 13],  
-  ('LFC', 'FFC'): [6, 12],  
-  ('OFC', 'LFC'): [9, 10],  
-  ('AFC', 'FFC'): [11, 12], 
-  ('CFC', 'TFC'): [1, 2],    
-}
-
-# Dicionário com restrições de jogos por mandantes
-restricoes_mandantes = { ('TFC', 'OFC'),  ('AFC', 'FFC') }
 
 ''' 
 *Função que checa se houve violação da restrição dos mandantes
@@ -165,30 +124,72 @@ def mostrar_grafo(G, colors, coloring):
     ))
   fig.show()
 
-jogos_por_cores = {}
-rodada_por_jogos = {}
 
-if backtracking(0, lista_de_jogos, jogos_por_cores, g, cores, restricoes_rodadas, restricoes_mandantes):
-  print("Coloração encontrada com sucesso!")
-else:
-  print("Erro ao tentar encontrar uma coloração válida.")
+if __name__ == '__main__':
+  # Lista com todos os times do campeonato
+  times = ['DFC', 'TFC', 'AFC', 'LFC', 'FFC', 'OFC', 'CFC']
+  lista_de_jogos = []
 
-for jogo, cor in jogos_por_cores.items():
-  print(f"Partida {jogo[0]} vs {jogo[1]} -> Rodada {cor + 1} (Cor: {cores[cor]})")
-  if cor + 1 in rodada_por_jogos:
-    rodada_por_jogos[cor + 1].append(jogo)
+  # Cores utilizadas
+  cores = [
+    'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink',
+    'brown', 'gray', 'cyan', 'magenta', 'lime', 'teal', 'navy'
+  ]
+
+  # Criando o grafo
+  g = nx.Graph()
+
+  # Acionando cada jogo possível como um vértice 
+  for a in times:
+    for b in times:
+      if a != b:
+        g.add_node((a, b))
+        lista_de_jogos.append((a, b))
+
+  # Adicionando arestas entre jogos conflituosos
+  for i in range(len(lista_de_jogos)):
+    for j in range(i + 1, len(lista_de_jogos)):
+      mandante_i, visitante_i = lista_de_jogos[i]
+      mandante_j, visitante_j = lista_de_jogos[j]
+      if mandante_i == mandante_j or mandante_i == visitante_j or visitante_i == mandante_j or visitante_i == visitante_j:
+        g.add_edge(lista_de_jogos[i], lista_de_jogos[j])
+
+  # Dicionário com restrições de jogos por rodadas 
+  restricoes_rodadas = {
+    ('DFC', 'CFC'): [0, 13],  
+    ('LFC', 'FFC'): [6, 12],  
+    ('OFC', 'LFC'): [9, 10],  
+    ('AFC', 'FFC'): [11, 12], 
+    ('CFC', 'TFC'): [1, 2],    
+  }
+
+  # Dicionário com restrições de jogos por mandantes
+  restricoes_mandantes = { ('TFC', 'OFC'),  ('AFC', 'FFC') }
+
+  jogos_por_cores = {}
+  rodada_por_jogos = {}
+
+  if backtracking(0, lista_de_jogos, jogos_por_cores, g, cores, restricoes_rodadas, restricoes_mandantes):
+    print("Coloração encontrada com sucesso!")
   else:
-    rodada_por_jogos[cor + 1] = [jogo]
+    print("Erro ao tentar encontrar uma coloração válida.")
 
-print()
-for i in range(len(cores)):
-  print(f'Rodada {i + 1} - Cor: {cores[i]}')
-print()
+  for jogo, cor in jogos_por_cores.items():
+    print(f"Partida {jogo[0]} vs {jogo[1]} -> Rodada {cor + 1} (Cor: {cores[cor]})")
+    if cor + 1 in rodada_por_jogos:
+      rodada_por_jogos[cor + 1].append(jogo)
+    else:
+      rodada_por_jogos[cor + 1] = [jogo]
 
-for i in range(1, 15):
-  print(f'{"="*7} - Rodada {i} -{"="*7}')
-  for (mandante, visitante) in rodada_por_jogos[i]:
-    print(f'{mandante} vs {visitante}')
-print()
+  print()
+  for i in range(len(cores)):
+    print(f'Rodada {i + 1} - Cor: {cores[i]}')
+  print()
 
-mostrar_grafo(g, cores, jogos_por_cores)
+  for i in range(1, 15):
+    print(f'{"="*7} - Rodada {i} -{"="*7}')
+    for (mandante, visitante) in rodada_por_jogos[i]:
+      print(f'{mandante} vs {visitante}')
+  print()
+
+  mostrar_grafo(g, cores, jogos_por_cores)
